@@ -1,0 +1,124 @@
+类实现正确性的论证
+1.	抽象对象得到了有效实现论证
+论证类的overview明确了抽象对象，且类的rep能够通过抽象函数映射到相应的抽象对象。
+2. 对象有效性论证
+public boolean repOK(){
+        return true;
+}
+在任意时刻，askqueue类的任意对象都能保证repOK为真，即任意一个方法的执行都不会导致rep为假
+
+初始时repOK为true
+Askqueue中有以下几个方法：
+getNextAskFloor
+getNextAskTime
+vectorPlus
+addtoQueue
+getaskQueue
+sort
+removeSameAsking
+其中getAskFloor、GetNextAskTime/getaskQueue不会使repOK变为false
+vectorPlus使now+1
+addtoQueue：if the time of this asking is not smaller than currentTime,
+then add the asking to askQueue and return the time。
+Sort：第二个参数返回一个int型的值，就相当于一个标志，告诉sort方法按什么顺序来对list进行排序。不会改变repOK
+removeSameAsking：去除时间相同的请求。不改变repok
+
+综上，对该类任意对象的任意调用都不会改变其repOK为true的特性。因此该类任意对象始终保持对象有效性。
+3.	方法实现正确性论证
+目标：在方法的前置条件和后置条件没有逻辑矛盾的前提下，根据前置条件和后置条件分析整理出完整的{<effect Y> with <input partition X>}，然后对照方法代码实现来论证给定每个<partition X>，方法执行结果都满足<effect Y>
+
+public int addtoQueue(Ask ask, int nowTime){//加入到队列
+    	//Requires: asking != null, current >= 0
+        //Modified: System.out, askQueue
+        //Effects: if the time of this asking is not smaller than currentTime,
+        // then add the asking to askQueue and return the time
+根据时间和请求判断，加入到请求队列。满足effects
+
+其余的方法都能满足。
+综上所述，所有方法的实现都满足规格。从而可以推断，AskQueue的实现是正确的，即满足其规格要求。
+
+1.	抽象对象得到了有效实现论证
+论证类的overview明确了抽象对象，且类的rep能够通过抽象函数映射到相应的抽象对象。
+2. 对象有效性论证
+public boolean repOK(){
+        return true;
+}
+在任意时刻，ALS_schedule类的任意对象都能保证repOK为真，即任意一个方法的执行都不会导致rep为假
+getarriveTime
+setarriveTime
+get、set方法不会改变repOK
+综上，对该类任意对象的任意调用都不会改变其repOK为true的特性。因此该类任意对象始终保持对象有效性。
+
+3	方法实现正确性论证
+目标：在方法的前置条件和后置条件没有逻辑矛盾的前提下，根据前置条件和后置条件分析整理出完整的{<effect Y> with <input partition X>}，然后对照方法代码实现来论证给定每个<partition X>，方法执行结果都满足<effect Y>
+public int getarriveTime(){
+		//Requires: none
+        //Modified: none
+        //Effects: return arriveTime
+public void setarriveTime(Elevator elevator){
+		//Requires: elevator != null
+        //Modified: arriveTime
+        //Effects: set arriveTime
+Get和set arriveTime。
+
+综上所述，所有方法的实现都满足规格。从而可以推断，ALS_schedule的实现是正确的，即满足其规格要求。
+
+
+1抽象对象得到了有效实现论证
+论证类的overview明确了抽象对象，且类的rep能够通过抽象函数映射到相应的抽象对象。
+2.	对象有效性论证
+public boolean repOK(){
+        if(now <= 0 || now > 10)
+            return false;
+        if(time < 0)
+            return false;
+        if(main <= 0)
+            return false;
+        return true;
+    }
+
+初始时的定义，repOK是true的
+几个Get的方法不会改变repOK
+Traversal和traverseCarryFloors是遍历请求、。不会使楼层超出范围。
+addCarryRequests加入请求队列。与楼层和主目标没关系
+run方法设定了电梯状态
+move是电梯运行并且改变状态
+resultPrint和bringPrint是输出
+bringRebuild重构队列，不会使repOK为false
+
+综上，对该类任意对象的任意调用都不会改变其repOK为true的特性。因此该类任意对象始终保持对象有效性。
+
+3	方法实现正确性论证
+目标：在方法的前置条件和后置条件没有逻辑矛盾的前提下，根据前置条件和后置条件分析整理出完整的{<effect Y> with <input partition X>}，然后对照方法代码实现来论证给定每个<partition X>，方法执行结果都满足<effect Y>
+public void traversal(AskQueue askQueue){
+    	//Requires: AskQueue != null
+        //Modified: ifStay[], askQueue
+        //Effects: 电梯每到一层就遍历整个队列，如果有在电梯运动方向上的且在时间范围内的就记录下来
+public void traverseCarryFloors(Vector<Ask> bring){
+    	//Requires: AskQueue != null
+        //Modified: ifStay[], askQueue
+    	//Effects： 遍历捎带请求队列
+public int addCarryRequests(Ask ask){
+    	//Requires: asking != null
+        //Modified: carryRequests
+        //Effects: 将捎带请求加入捎带请求队列
+Askqueue不是null就遍历整个队列，捎带队列。Add可以加入队列。Effects成立
+
+public void runrun(AskQueue askQueue, int i){
+    	//Requires:askQueue != null,
+        // i is the first element that make the askQueue.getAskingQueue().get(i) != null
+        //Modified: primaryFloor, carryRequests, time, ifStay[], askQueue
+       //Effects: 取整个队列中最近的请求
+Askqueue不为null，在电梯运行中取最近的请求。
+
+public void move(AskQueue askQueue){
+    	//Requires: askQueue != null
+        //Modified: currentFloor, time, ifStay[]
+        //Effects: 电梯运行并改变状态
+Askqueue不为null
+让电梯运行。Effects成立
+其余的类包括get类、get的effects成立
+两个print类，调用就可以输出，effects成立。
+
+综上所述，所有方法的实现都满足规格。从而可以推断，ALS_schedule的实现是正确的，即满足其规格要求。
+
